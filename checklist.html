@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IT Daily Checklist</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #5a75f1;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --light: #f8f9fa;
+      --lighter: #f5f7ff;
+      --dark: #212529;
+      --darker: #1a1e21;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --success: #4cc9f0;
+      --success-dark: #3ab7dc;
+      --danger: #f72585;
+      --danger-dark: #e51777;
+      --warning: #f8961e;
+      --border-radius: 10px;
+      --border-radius-sm: 6px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.12);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      background-color: var(--lighter);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2.5rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.8), rgba(255,255,255,0.3));
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 2.2rem;
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      opacity: 0.9;
+      font-weight: 400;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1.2rem 1.8rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+    }
+
+    .card-header i {
+      font-size: 1.3rem;
+      background: rgba(255, 255, 255, 0.15);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-body {
+      padding: 1.8rem;
+    }
+
+    .task-list {
+      list-style: none;
+      margin-bottom: 1.8rem;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 0.9rem 1rem;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      background-color: white;
+      border: 1px solid var(--light-gray);
+    }
+
+    .task-item:hover {
+      background-color: rgba(67, 97, 238, 0.05);
+      border-color: rgba(67, 97, 238, 0.2);
+    }
+
+    .task-status {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      flex-shrink: 0;
+      transition: var(--transition);
+      font-size: 0.8rem;
+    }
+
+    .status-check {
+      background-color: var(--success);
+      color: white;
+      box-shadow: 0 2px 4px rgba(76, 201, 240, 0.3);
+    }
+
+    .status-check:hover {
+      background-color: var(--success-dark);
+    }
+
+    .status-cross {
+      background-color: rgba(247, 37, 133, 0.08);
+      color: var(--danger);
+      border: 1px solid rgba(247, 37, 133, 0.2);
+    }
+
+    .status-cross:hover {
+      background-color: rgba(247, 37, 133, 0.15);
+    }
+
+    .task-text {
+      flex-grow: 1;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--darker);
+    }
+
+    .task-completed .task-text {
+      text-decoration: line-through;
+      color: var(--gray);
+      font-weight: 400;
+    }
+
+    .add-task-form {
+      display: flex;
+      margin-bottom: 1.8rem;
+      box-shadow: var(--shadow);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .add-task-input {
+      flex-grow: 1;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background-color: var(--light);
+    }
+
+    .add-task-input:focus {
+      outline: none;
+      background-color: white;
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .add-task-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 1.4rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-task-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .notes-section {
+      margin-top: 1.5rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 1.8rem;
+    }
+
+    .notes-label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 0.95rem;
+    }
+
+    .notes-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 1.2rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--border-radius);
+      font-family: inherit;
+      resize: vertical;
+      transition: var(--transition);
+      font-size: 0.95rem;
+      background-color: var(--light);
+    }
+
+    .notes-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+      background-color: white;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: 3rem 0;
+    }
+
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67, 97, 238, 0.25);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(67, 97, 238, 0.08);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-bar {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      header {
+        padding: 2rem 1rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .task-item {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .spinner {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>IT Daily Checklist</h1>
+      <p class="header-subtitle">Pantau dan kelola hardware & software le bajo cluster</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="action-bar">
+      <button class="btn btn-primary" id="export-pdf-btn">
+        <i class="fas fa-file-export"></i> Export PDF
+        <div class="spinner" id="pdf-spinner"></div>
+      </button>
+      <button class="btn btn-outline" id="reset-btn">
+        <i class="fas fa-redo"></i> Reset
+      </button>
+    </div>
+
+    <div class="dashboard" id="checklist-content">
+      <div class="card">
+        <div class="card-header">
+          <span>Le Bajo Flores</span>
+          <i class="fas fa-server"></i>
+        </div>
+        <div class="card-body">
+          <ul class="task-list" id="le-bajo-list"></ul>
+          
+          <div class="add-task-form">
+            <input type="text" class="add-task-input" id="le-bajo-input" placeholder="Tambah tugas baru...">
+            <button class="add-task-btn" id="le-bajo-add-btn">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          
+          <div class="notes-section">
+            <label class="notes-label">Catatan/Keterangan:</label>
+            <textarea class="notes-textarea" id="le-bajo-notes" placeholder="Tambahkan catatan atau deskripsi..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>Lplus | Buso | Office</span>
+          <i class="fas fa-desktop"></i>
+        </div>
+        <div class="card-body">
+          <ul class="task-list" id="office-list"></ul>
+          
+          <div class="add-task-form">
+            <input type="text" class="add-task-input" id="office-input" placeholder="Tambah tugas baru...">
+            <button class="add-task-btn" id="office-add-btn">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          
+          <div class="notes-section">
+            <label class="notes-label">Catatan/Keterangan:</label>
+            <textarea class="notes-textarea" id="office-notes" placeholder="Tambahkan catatan atau deskripsi..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // Data tugas default
+    const defaultTasks = {
+      'le-bajo': [
+        "Apakah HTB A Jalur Lebajo resto berfungsi?",
+        "Apakah HTB A Jalur Office finance berfungsi?",
+        "Apakah HTB A Jalur Lebajo berfungsi?",
+        "Apakah HTB B Lebajo Vsoft berfungsi?",
+        "Apakah HTB B Office finance berfungsi?",
+        "Apakah HTB B Lebajo berfungsi?",
+        "Apakah ONT Telkom berfungsi?",
+        "Apakhan ONT Oxigen berfungsi?",
+        "Apakah Mikrotik RB 750 GR3 berfungsi?",
+        "Apakah Mikrotik RB 450GX4 berfungsi?",
+        "Apakah Lampu Ruangan Server Audio Lebajo Resto Menyala?",
+        "Apakah AC ruangan Audio server 16 derajat?",
+        "Apakah Mikrotik Hap Lite berfungsi?",
+        "Apakah AC ruangan Audio server menyala?",
+        "Apakah Bluetooth Lebajo resto berfungsi?",
+        "Apakah SUB 1.2 Area DJ Lebajo resto berfungsi?",
+        "Apakah SUB 1.2 Area DJ Lebajo resto berfungsi??",
+        "Apakah SUB 1.2 Area Bar Lebajo resto berfungsi?",
+        "Apakah SUB 1.2 Area Bar Lebajo resto berfungsi?",
+        "Apakah SUB 1.1 Area Bar Lebajo resto berfungsi?",
+        "Apakah SUB 1.2 Area Dinning Room Lebajo resto berfungsi?",
+        "Apakah SUB 1.1 Area Dinning Room Lebajo resto berfungsi?",
+        "Apakah Speaker DJ Area 1.2 Lebajo resto berfungsi?",
+        "Apakah Speaker DJ Area 1.1 Lebajo resto berfungsi?",
+        "Apakah Speaker Dinning Room 1.2 Lebajo resto berfungsi?",
+        "Apakah Speaker Dinning Room 1.1 Lebajo resto berfungsi?",
+        "Apakah Speaker Daybed 1.2 Lebajo resto berfungsi?",
+        "Apakah Speaker Daybed 1.1 Lebajo resto berfungsi?",
+        "Apakah Speaker Daybed 1.2 Lebajo resto berfungsi?",
+        "Apakah HP Reservasi Lebajo resto berfungsi?",
+        "Apakah HP Playlist Lebajo resto berfungsi?",
+        "Apakah Iped Umai Lebajo resto berfungsi?",
+        "Apakah Iped Order 1.1 Lebajo resto berfungsi?",
+        "Apakah Iped Order 1.2 Lebajo resto berfungsi?",
+        "Apakah Iped Chasier Lebajo resto berfungsi?",
+        "Apakah Iped Sound Lebajo resto berfungsi?",
+        "Apakah Extreme Daybed Berfungsi?",
+        "Apakah Extreme MAX 4.6 1.2 Berfungsi?",
+        "Apakah Extreme MAX 4.6 1.1 Berfungsi?",
+        "Apakah Extreme MAX 7000 1.3 Berfungsi?",
+        "Apakah Extreme MAX 7000 1.2 Berfungsi?",
+        "Apakah Extreme MAX 7000 1.1 Berfungsi?",
+        "Apakah Mirani MIR-480E berfungsi?",
+        "Apakah Barel DL Unntuk DJ berfungsi?",
+        "Apkah Ashley SE-2080 berfungsi?",
+        "Apakah DL 16 berfungsi?",
+        "Apakah Switch HUB Tenda berfungsi?",
+        "Apakah Switch HUB Tenda Bar and Cashier berfungsi?",
+        "Apakah Mixer Midas M32 Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Kitchen Belakang Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Loby Deck Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Day Bed I Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Sun Deck Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Toilet Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Daybed II Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Gas Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Kitchen Order Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Kitchen Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area DJ I Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area DJ II Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Cashier Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Hostest Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Jaring Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Dinning Room Lebajo resto berfungsi?",
+        "Apakah Kamera CCTV Area Staf Lebajo resto berfungsi?",
+        "Apakah printer Bar leabjo resto Berfungsi?",
+        "Apakah printer Order lebajo resto berfungsi?",
+        "Apakah printer Cashier lebajo resto berfungsi?",
+        "Apakah Monitor LED TV lebajo resto berfungsi?",
+        "Apakah Panel DC Untuk CCTV Lebajo resto berfungsi?",
+        "Apakah DVR Server Lebajo resto berfungsi",
+        "Apakah UPS kedua Prolink Lebajo resto berfungsi?",
+        "Apakah UPS Utama Lebajo restoberfungsi",
+        "Apakah POE Tenda I lebajo resto berfungsi?",
+        "Apakah POE Tenda II lebajo resto berfungsi?",
+        "Apakah AP ruijie 1.1 Lebajo berfungsi?",
+        "Apakah AP ruijie 1.2 Lebajo berfungsi",
+        "Apakah AP ruijie 1.3 Lebajo VIP berfungsi?",
+        "Apakah AP ruijie 1.4 Lebajo VIP berfungsi?",
+        "Apakah AP ruijie 1.4 Lebajo VIP berfungsi?",
+        "Apakah AP ruijie 1.4 Lebajo VIP berfungsi?",
+        "Apakah Suhu Power Extreme Max 7000 I Di 20-27°c ?",
+        "Apakah Suhu Power Extreme Max 7000 II Di 20-27°c ?",
+        "Apakah Suhu Power Extreme Max 7000 III Di 20-27°c ?",
+        "Apakah System Vsoft Lebajo berfungsi?",
+        "Apakah Komputer Server Cloud Berfungsi?",
+        "Apakah Pioner DJ RX-3 Berfungsi?",
+        "Apakah DSR Lebajo Terkirim?",
+        "Apakah DRR Lebajo,Lplus,dan Buso Terkirim?"
+       
+      ],
+      'office': [
+        "Apakah lampu ruangan server L+ menyala?",
+        "Apakah AC ruangan server L+ berfungsi?",
+        "Apakah suhu ruangan server L+ 16 derajat?",
+        "Apakah Komputer Client L+ berfungsi?",
+        "Apakah Komputer Server L+ berfungsi",
+        "Apakah System vsoft Buso Berfungsi?",
+        "Apakah System vsoft L+ berfungsi?",
+        "Apakah printer Bar L+ berfungsi?",
+        "Apakah printer Cashier L+ berfungsi?",
+        "Apakah printer Kitchen L+ berfungsi?",
+        "Apakah Speed Test Oxigen rata-rata di 50 s/d 100 Mbps?",
+        "Apakah Speed Test Indibiz rata-rata di 50 s/d 100 Mbps?",
+        "Apakah speaker jalur Buso berfungsi?",
+        "Apakah speaker jalur Lebajo Shoop L+ berfungsi",
+        "Apakah speaker jalur Hallway L+ berfungsi?",
+        "Apakah speaker jalur resto L+ berfungsi?",
+        "Apakah Iped Order Buso berfungsi?",
+        "Apakah Iped Cashier Buso berfungsi?",
+        "Apakah Printer Bar Buso berfungsi?",
+        "Apakah Printer Order Buso berfungsi?",
+        "Apakah Printer Cashier Buso berfungsi?",
+        "Apakah Kamera CCTV Area Office lplus Berfungsi?",
+        "Apakah kamera CCTV Area Hostest Lplus Berfungsi?",
+        "Apakah kamera CCTV Area Gas Lplus berfungsi?",
+        "Apakah Kamera CCTV Area Kitchen lplus I berfungsi?",
+        "Apakah Kamera CCTV Area Sunset berfungsi?",
+        "Apakah Kamera CCTV Area Hallwey berfungsi?",
+        "Apakah Kamera CCTV Area Store berfungsi?",
+        "Apakah Kamera CCTV Area Bar Lplus berfungsi?",
+        "Apakah Kamera CCTV Area Dinning Room Lplus berfungsi?",
+        "Apakah Kamera CCTV Area Dinning Room Buso I berfungsi?",
+        "Apakah Kamera CCTV Area Dinning Room Buso II berfungsi?",
+        "Apakah Kamera CCTV Area Bar Buso berfungsi?",
+        "Apakah Kamera CCTV Area Parkiran berfungsi?",
+        "Apakah kamera CCTV Area Ktchen Lplus II berfungsi",
+        "Apakah kamera CCTV Area Ktchen Buso berfungsi",
+        "Apakah Panel DC Untuk CCTV berfungsi?",
+        "pakah DVR Server L+ berfungsi",
+        "Apakah Monitor LED TV L+ berfungsi?",
+        "Apakah UPS APC L+ berfungsi?",
+        "Apakah UPS proliant I (server) L+ berfungsi?",
+        "Apakah UPS proliant II L+ berfungsi?",
+        "Apakah HP Reservasi L+ berfungsi?",
+        "Apakah Huawei Tab Umai L+ berfungsi?",
+        "Apakah Huawei Tab Vsoft cashier L+ berfungsi?",
+        "Apakah Power Audac PMQ240 berfungsi?",
+        "Apakah Mixer MG10XU di L+ berfungsi?",
+        "Apakah POE Tenda di L+ berfungsi?",
+        "Apakah Mikrotik RB 450GX4 berfungsi?",
+        "Apakah Mikrotik Hab Lite berfungsi?",
+        "Apakah Mikrotik RB 750 GR3 berfungsi?",
+        "Apakah Network Panel Office berfungsi?",
+        "Apakah AP Canteen Area berfungsi?",
+        "Apakah AP Office Area berfungsi?",
+        "Apakah AP Buso Area berfungsi?",
+        "Apakah AP Lplus Area berfungsi?",
+        "Apakah Led Tv Android Xiomi berfungsi?",
+        "Apakah Megaphone berfungsi?",
+        "Apakah CCTV Bardi Area Shop berfungsi?",
+        "Apakah CCTV Bardi Ruangan IT Lplus berfungsi?",
+        "Apakah Email DSR Buso Terkirim?",
+        "Apakah Email DSR Lplus Terkirim?",
+      ]
+    };
+
+    // Inisialisasi aplikasi
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load tugas default
+      loadTasks('le-bajo-list', defaultTasks['le-bajo']);
+      loadTasks('office-list', defaultTasks['office']);
+      
+      // Load data yang disimpan
+      loadSavedData();
+      
+      // Setup event listeners
+      setupEventListeners();
+    });
+
+    // Fungsi untuk memuat tugas
+    function loadTasks(listId, tasks) {
+      const list = document.getElementById(listId);
+      list.innerHTML = '';
+      
+      tasks.forEach(task => {
+        addTaskToList(list, task, false);
+      });
+    }
+
+    // Fungsi untuk menambahkan tugas ke list
+    function addTaskToList(list, taskText, saveToStorage = true) {
+      const newItem = document.createElement('li');
+      newItem.className = 'task-item';
+      
+      // Cek status di localStorage
+      const savedStatus = localStorage.getItem(taskText);
+      const isCompleted = savedStatus === 'check';
+      
+      newItem.innerHTML = `
+        <span class="task-status ${isCompleted ? 'status-check' : 'status-cross'}">
+          <i class="fas fa-${isCompleted ? 'check' : 'times'}"></i>
+        </span>
+        <span class="task-text">${taskText}</span>
+      `;
+      
+      if (isCompleted) {
+        newItem.classList.add('task-completed');
+      }
+      
+      list.appendChild(newItem);
+      
+      // Tambahkan event listener untuk toggle status
+      newItem.addEventListener('click', function() {
+        toggleTaskStatus(this);
+      });
+      
+      // Simpan ke localStorage jika diperlukan
+      if (saveToStorage && !localStorage.getItem(taskText)) {
+        localStorage.setItem(taskText, 'cross');
+      }
+    }
+
+    // Fungsi untuk toggle status tugas
+    function toggleTaskStatus(taskItem) {
+      const statusSpan = taskItem.querySelector('.task-status');
+      const taskText = taskItem.querySelector('.task-text').textContent.trim();
+      
+      if (statusSpan.classList.contains('status-check')) {
+        // Ubah ke status belum selesai
+        statusSpan.className = 'task-status status-cross';
+        statusSpan.innerHTML = '<i class="fas fa-times"></i>';
+        taskItem.classList.remove('task-completed');
+        localStorage.setItem(taskText, 'cross');
+      } else {
+        // Ubah ke status selesai
+        statusSpan.className = 'task-status status-check';
+        statusSpan.innerHTML = '<i class="fas fa-check"></i>';
+        taskItem.classList.add('task-completed');
+        localStorage.setItem(taskText, 'check');
+      }
+    }
+
+    // Fungsi untuk memuat data yang disimpan
+    function loadSavedData() {
+      // Load catatan
+      document.querySelectorAll('.notes-textarea').forEach(textarea => {
+        const savedNote = localStorage.getItem(textarea.id);
+        if (savedNote) {
+          textarea.value = savedNote;
+        }
+      });
+    }
+
+    // Fungsi untuk setup event listeners
+    function setupEventListeners() {
+      // Tombol tambah tugas
+      document.getElementById('le-bajo-add-btn').addEventListener('click', () => {
+        addNewTask('le-bajo-input', 'le-bajo-list');
+      });
+      
+      document.getElementById('office-add-btn').addEventListener('click', () => {
+        addNewTask('office-input', 'office-list');
+      });
+      
+      // Input enter key
+      document.getElementById('le-bajo-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addNewTask('le-bajo-input', 'le-bajo-list');
+        }
+      });
+      
+      document.getElementById('office-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addNewTask('office-input', 'office-list');
+        }
+      });
+      
+      // Textarea notes
+      document.querySelectorAll('.notes-textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+          localStorage.setItem(this.id, this.value);
+        });
+      });
+      
+      // Tombol export PDF
+      document.getElementById('export-pdf-btn').addEventListener('click', exportToPDF);
+      
+      // Tombol reset
+      document.getElementById('reset-btn').addEventListener('click', resetChecklist);
+    }
+
+    // Fungsi untuk menambahkan tugas baru
+    function addNewTask(inputId, listId) {
+      const input = document.getElementById(inputId);
+      const taskText = input.value.trim();
+      
+      if (taskText) {
+        const list = document.getElementById(listId);
+        addTaskToList(list, taskText);
+        input.value = '';
+        
+        // Scroll ke item baru
+        list.lastChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        showNotification('Tugas berhasil ditambahkan');
+      }
+    }
+
+    // Fungsi untuk reset checklist
+    function resetChecklist() {
+      if (confirm('Apakah Anda yakin ingin mereset semua checklist ke status belum selesai?')) {
+        document.querySelectorAll('.task-item').forEach(item => {
+          const statusSpan = item.querySelector('.task-status');
+          const taskText = item.querySelector('.task-text').textContent.trim();
+          
+          statusSpan.className = 'task-status status-cross';
+          statusSpan.innerHTML = '<i class="fas fa-times"></i>';
+          item.classList.remove('task-completed');
+          localStorage.setItem(taskText, 'cross');
+        });
+        
+        showNotification('Checklist telah direset');
+      }
+    }
+
+    // Fungsi untuk export ke PDF
+    function exportToPDF() {
+      const pdfSpinner = document.getElementById('pdf-spinner');
+      pdfSpinner.style.display = 'block';
+      
+      // Clone konten yang akan diexport
+      const content = document.getElementById('checklist-content').cloneNode(true);
+      
+      // Hitung progress
+      const totalTasks = document.querySelectorAll('.task-item').length;
+      const completedTasks = document.querySelectorAll('.status-check').length;
+      const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
+      
+      // Buat elemen header untuk PDF
+      const pdfHeader = document.createElement('div');
+      pdfHeader.style.textAlign = 'center';
+      pdfHeader.style.marginBottom = '2rem';
+      pdfHeader.style.paddingBottom = '1.5rem';
+      pdfHeader.style.borderBottom = '1px solid rgba(0, 0, 0, 0.1)';
+      
+      const date = new Date().toLocaleDateString('id-ID', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+      
+      pdfHeader.innerHTML = `
+        <h2 style="font-size: 1.8rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 700;">
+          IT Daily Checklist Report
+        </h2>
+        <p style="color: var(--gray); font-size: 0.95rem;">
+          Dibuat pada: ${date}
+        </p>
+        <div style="background: #f8f9fa; padding: 0.8rem; border-radius: 6px; display: inline-block; margin-top: 1rem;">
+          <span style="font-weight: 600;">Progress: </span>
+          ${completedTasks} dari ${totalTasks} tugas selesai (${completionPercentage}%)
+        </div>
+      `;
+      
+      // Sisipkan header di awal konten
+      content.insertBefore(pdfHeader, content.firstChild);
+      
+      // Hapus form tambah tugas dari PDF
+      content.querySelectorAll('.add-task-form').forEach(form => form.remove());
+      
+      // Tambahkan badge untuk tugas yang selesai
+      content.querySelectorAll('.status-check').forEach(status => {
+        const badge = document.createElement('span');
+        badge.style.backgroundColor = 'var(--success)';
+        badge.style.color = 'white';
+        badge.style.padding = '0.3rem 0.8rem';
+        badge.style.borderRadius = '20px';
+        badge.style.fontSize = '0.8rem';
+        badge.style.fontWeight = '600';
+        badge.style.marginLeft = '1rem';
+        badge.style.display = 'inline-flex';
+        badge.style.alignItems = 'center';
+        badge.style.gap = '0.3rem';
+        badge.innerHTML = '<i class="fas fa-check"></i> Selesai';
+        
+        status.closest('.task-item').querySelector('.task-text').appendChild(badge);
+      });
+      
+      // Opsi untuk html2pdf
+      const options = {
+        margin: [0.8, 0.8],
+        filename: `IT_Checklist_${new Date().toISOString().slice(0,10)}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          letterRendering: true,
+          useCORS: true,
+          scrollX: 0,
+          scrollY: 0
+        },
+        jsPDF: { 
+          unit: 'in', 
+          format: 'a4', 
+          orientation: 'portrait'
+        }
+      };
+      
+      // Export ke PDF
+      html2pdf().set(options).from(content).save().then(() => {
+        pdfSpinner.style.display = 'none';
+        showNotification('PDF berhasil diexport');
+      }).catch(err => {
+        console.error('PDF export error:', err);
+        pdfSpinner.style.display = 'none';
+        showNotification('Gagal mengekspor PDF', 'error');
+      });
+    }
+
+    // Fungsi untuk menampilkan notifikasi
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      
+      if (type === 'error') {
+        notification.style.backgroundColor = 'var(--danger)';
+      }
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
